@@ -11,8 +11,8 @@ services:
     command: sh -c "sleep 300 && ./haggar -agents=10 -metrics=1000 -carbon=graphite:2003"
 
   graphite:
-    #image: graphiteapp/graphite-statsd:latest
-    image: efce36da8b86
+    image: graphiteapp/graphite-statsd:latest
+    #image: efce36da8b86
     ports:
     - 80:80
     - 2003:2003
