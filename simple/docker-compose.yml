@@ -12,7 +12,7 @@ services:
 
   graphite:
     image: graphiteapp/graphite-statsd:latest
-    #image: efce36da8b86
+    #image: f0d355b875d7
     ports:
     - 80:80
     - 2003:2003
@@ -21,9 +21,10 @@ services:
     environment:
     - COLLECTD=1
     - GRAPHITE_DEBUG=1
+    - REDIS_TAGDB=1
 
   grafana:
-    image: grafana/grafana:5.3.2
+    image: grafana/grafana:6.4.3
     ports:
     - 3000:3000
     volumes:
