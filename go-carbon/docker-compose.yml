@@ -23,10 +23,7 @@ services:
     - COLLECTD=1
     - GRAPHITE_DEBUG=1
     - REDIS_TAGDB=1
-    - BRUBECK=1
-#    - GOCARBON=1
-#    depends_on:
-#      - db
+    - GOCARBON=1
 
   grafana:
     image: grafana/grafana:6.4.3
@@ -47,9 +44,3 @@ services:
     - ./grafana-bootstrap.sh:/grafana-bootstrap.sh:ro
     command: >
       -c '/grafana-bootstrap.sh'
-
-#  db:
-#    image: percona
-#    restart: always
-#    environment:
-#      MYSQL_ROOT_PASSWORD: root

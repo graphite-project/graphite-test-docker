@@ -10,7 +10,9 @@ dist
 coverage.xml
 .tox
 conf/*.conf
-storage
+statsd/storage/*
+simple/storage/*
+go-carbon/storage/*
 _trial_temp
 htmlcov
 *.swp

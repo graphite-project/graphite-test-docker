@@ -2,13 +2,14 @@ version: '2'
 
 services:
 
-  haggar:
-    image: haggar:latest
-    build: ./haggar
+  # statsd-tg -c counters_num -t timers_num -g gauges_num -s sets_num -S set_size -d dest -D dport -T threads_num
+  statsd-tg:
+    image: statsd-tg:latest
+    build: ./statsd-tg
     depends_on:
     - graphite
     - grafana
-    command: sh -c "sleep 300 && ./haggar -agents=10 -metrics=10000 -carbon=graphite:2003"
+    command: sh -c "sleep 300 && ./statsd-tg -d graphite -D 8125 -T 1"
 
   graphite:
     #image: graphiteapp/graphite-statsd:latest
@@ -16,17 +17,14 @@ services:
     ports:
     - 80:80
     - 2003:2003
-    - 8125:8125
+    - 8125:8125/udp
     volumes:
     - ./storage:/opt/graphite/storage
     environment:
     - COLLECTD=1
     - GRAPHITE_DEBUG=1
     - REDIS_TAGDB=1
-    - BRUBECK=1
-#    - GOCARBON=1
-#    depends_on:
-#      - db
+#    - BRUBECK=1
 
   grafana:
     image: grafana/grafana:6.4.3
@@ -47,9 +45,3 @@ services:
     - ./grafana-bootstrap.sh:/grafana-bootstrap.sh:ro
     command: >
       -c '/grafana-bootstrap.sh'
-
-#  db:
-#    image: percona
-#    restart: always
-#    environment:
-#      MYSQL_ROOT_PASSWORD: root
