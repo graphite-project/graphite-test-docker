@@ -12,5 +12,4 @@ RUN \
   make && \
   make install
 
-ENTRYPOINT [ "statsd-tg" ]
-CMD [ "-h" ]
+CMD [ "/usr/local/bin/statsd-tg", "-h" ]
