@@ -12,7 +12,7 @@ services:
 
   graphite:
     #image: graphiteapp/graphite-statsd:latest
-    image: 1e433828fdcf
+    image: 5ce143ea419c
     ports:
     - 80:80
     - 2003:2003
@@ -24,6 +24,7 @@ services:
     - GRAPHITE_DEBUG=1
     - REDIS_TAGDB=1
     - GOCARBON=1
+    - GRAPHITE_CLUSTER_SERVERS="127.0.0.1:8000"
 
   grafana:
     image: grafana/grafana:6.4.3
