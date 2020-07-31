@@ -1,0 +1,75 @@
+version: '2'
+
+services:
+
+  haggar:
+    image: haggar:latest
+    build: ./haggar
+    depends_on:
+    - graphite1
+    - graphite2
+    - graphite3
+    - grafana
+    command: sh -c "sleep 30 && ./haggar -agents=10 -metrics=10000 -carbon=graphite1:2013"
+
+  graphite1:
+    image: graphiteapp/graphite-statsd:latest
+    #image: 1e433828fdcf
+    ports:
+    - 81:80
+    - 2103:2003
+    - 2113:2013
+    volumes:
+    - ./conf/graphite1:/opt/graphite/conf
+    - ./storage/graphite1:/opt/graphite/storage
+    environment:
+    - RELAY=1
+    - GRAPHITE_DEBUG=1
+    - CARBON_DISABLE_TAGS=1
+    - GRAPHITE_CLUSTER_SERVERS=graphite2:80,graphite3:80
+
+  graphite2:
+    image: graphiteapp/graphite-statsd:latest
+    #image: 1e433828fdcf
+    ports:
+      - 82:80
+      - 2203:2003
+    volumes:
+      - ./storage/graphite2:/opt/graphite/storage
+    environment:
+      - GRAPHITE_DEBUG=1
+      - CARBON_DISABLE_TAGS=1
+      - GRAPHITE_CLUSTER_SERVERS=graphite1:80,graphite3:80
+
+  graphite3:
+    image: graphiteapp/graphite-statsd:latest
+    #image: 1e433828fdcf
+    ports:
+      - 83:80
+      - 2303:2003
+    volumes:
+      - ./storage/graphite3:/opt/graphite/storage
+    environment:
+      - GRAPHITE_DEBUG=1
+      - CARBON_DISABLE_TAGS=1
+      - GRAPHITE_CLUSTER_SERVERS=graphite1:80,graphite2:80
+
+  grafana:
+    image: grafana/grafana:6.4.3
+    ports:
+    - 3000:3000
+    volumes:
+    - ./grafana.json:/usr/share/grafana/public/dashboards/home.json:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+
+  grafana_bootstrap:
+    image: haggar:latest
+    entrypoint: /bin/sh
+    depends_on:
+    - grafana
+    volumes:
+    - ./grafana-bootstrap.sh:/grafana-bootstrap.sh:ro
+    command: >
+      -c '/grafana-bootstrap.sh'

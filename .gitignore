@@ -5,6 +5,7 @@ dist
 *.pyc
 .idea
 *.iml
+*.pid
 .venv
 .coverage
 coverage.xml
@@ -13,6 +14,10 @@ conf/*.conf
 statsd/storage/*
 simple/storage/*
 go-carbon/storage/*
+cluster/storage/graphite1/*
+cluster/storage/graphite2/*
+cluster/storage/graphite3/*
 _trial_temp
 htmlcov
 *.swp
+
