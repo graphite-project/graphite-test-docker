@@ -10,7 +10,6 @@ dist
 .coverage
 coverage.xml
 .tox
-conf/*.conf
 statsd/storage/*
 simple/storage/*
 go-carbon/storage/*
